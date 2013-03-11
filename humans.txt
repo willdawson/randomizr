@@ -1,0 +1,10 @@
+# humanstxt.org/
+
+# TEAM
+Designer: Ridiculus Tortor
+Developer: Mollis Pellentesque
+
+# SITE
+URL:
+Standards: 
+Components:
