@@ -476,18 +476,27 @@ a {
       .wrapper .pane.pane-2 .add-to-palette {
         bottom: 40px;
         left: 40px; }
+      .wrapper .pane.pane-2 .lock-pane {
+        bottom: 80px;
+        left: 80px; }
     .wrapper .pane.pane-3 {
       bottom: 0;
       left: 0; }
       .wrapper .pane.pane-3 .add-to-palette {
         top: 40px;
         right: 40px; }
+      .wrapper .pane.pane-3 .lock-pane {
+        top: 80px;
+        right: 80px; }
     .wrapper .pane.pane-4 {
       bottom: 0;
       left: 50%; }
       .wrapper .pane.pane-4 .add-to-palette {
         top: 40px;
         left: 40px; }
+      .wrapper .pane.pane-4 .lock-pane {
+        top: 80px;
+        left: 80px; }
   .wrapper .refresh-colors {
     display: inline-block;
     background: #fff;

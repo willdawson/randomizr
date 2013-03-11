@@ -36,12 +36,14 @@
 	app.colorPanes = function () {
 		app.panes.each(function (i, pane) {
 			var color = app.getRandomColor();
-			$(pane).css('background-color', color).children('h1').html(color);
-			if ( app.checkContrast(color.substring(1)) === 'white' ) {
+			if ( ! $(pane).hasClass('locked') ) {
+				$(pane).css('background-color', color).children('h1').html(color);
+			}
+			/*if ( app.checkContrast(color.substring(1)) === 'white' ) {
 				$(pane).css('color', 'rgba(255, 255, 255, .7)');
 			} else {
 				$(pane).css('color', 'rgba(0, 0, 0, .5)');
-			}
+			}*/
 		});
 	}
 
@@ -65,22 +67,55 @@
 		return (parseInt(hexcolor, 16) > 0xffffff/2) ? 'black':'white';
 	}
 
+	app.lockPane = function (index) {
+		// argument is zero-index of pane to lock
+		var pane = app.panes[index];
+		$(pane).addClass('locked');
+		$(pane).children('.lock-pane').html('&#128274;');
+		console.log('lock pane');
+	}
+
+	app.unlockPane = function (index) {
+		// argument is zero-index of pane to lock
+		var pane = app.panes[index];
+		$(pane).removeClass('locked');
+		$(pane).children('.lock-pane').html('&#128275;');
+		console.log('unlock pane');
+	}
+
 	app.bindEvents = function () {
 		//refresh colors
-		$('.refresh-colors').on('click', app.colorPanes);
+		$('.refresh-colors').on('click', function (e) {
+			e.preventDefault();
+			app.colorPanes();
+		});
 		// resize wrapper on window resize
 		$(window).on('resize', app.resizeWrapper);
 		// add color to palette
-		$('.wrapper .pane .add-to-palette').on('click', function () {
+		$('.wrapper .pane .add-to-palette').on('click', function (e) {
+			e.preventDefault();
 			var color = $(this).parent().css('background-color');
 			app.addColorToPalette(color);
 			console.log('test');
 		});
 		// remove color from palette (need to delegate since .color-box does not exist on doc.ready)
-		$('.palette-box').on('click', '.color-box', function () {
+		$('.palette-box').on('click', '.color-box', function (e) {
+			e.preventDefault();
 			console.log('test');
 			var index = $(this).index();
 			app.removeColorFromPalette(index);
+		});
+		// lock panes
+		$('.lock-pane').on('click', function (e) {
+			e.preventDefault();
+			var index = $(this).parent().index(),
+			$targetPane = $(this).parent();
+			console.log($targetPane);
+			if ( ! $targetPane.hasClass('locked') ) {
+				app.lockPane(index);
+			} else if ( $targetPane.hasClass('locked') ) {
+				app.unlockPane(index);
+			}
 		});
 	}
 
