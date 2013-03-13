@@ -409,7 +409,6 @@ a {
     width: 50%;
     height: 50%;
     position: absolute;
-    -webkit-transition: all .5s ease-in-out;
     font-size: 40px;
     font-weight: bold;
     text-align: center; }
@@ -544,4 +543,4 @@ a {
     float: left;
     box-shadow: 0 1px 7px rgba(0, 0, 0, 0.7); }
     .palette-box .color-box:hover {
-      cursor: move; }
+      cursor: pointer; }

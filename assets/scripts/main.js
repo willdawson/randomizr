@@ -9,7 +9,6 @@
 	app.init = function () {
 		this.colorPanes();
 		this.bindEvents();
-		this.verticallyCenterText();
 		this.resizeWrapper();
 	}
 
@@ -24,7 +23,7 @@
 	app.palette = [];
 
 	app.getRandomColor = function () {
-		var characters = '0123456789ABCDEF'.split(''),
+		var characters = '0123456789abcdef'.split(''),
 		color = '#';
 		for (var i = 0; i < 6; i++ ) {
 			color += characters[Math.round(Math.random() * (characters.length - 1))];
@@ -37,13 +36,8 @@
 		app.panes.each(function (i, pane) {
 			var color = app.getRandomColor();
 			if ( ! $(pane).hasClass('locked') ) {
-				$(pane).css('background-color', color).children('h1').html(color);
+				$(pane).animate({'background-color': color}, 200);
 			}
-			/*if ( app.checkContrast(color.substring(1)) === 'white' ) {
-				$(pane).css('color', 'rgba(255, 255, 255, .7)');
-			} else {
-				$(pane).css('color', 'rgba(0, 0, 0, .5)');
-			}*/
 		});
 	}
 
@@ -144,11 +138,6 @@
 			zIndex: 100,
 			cursor: 'move'
 		});
-	}
-
-	app.verticallyCenterText = function () {
-		var height = $('.pane').eq(0).outerHeight();
-		$('.pane').children('h1').css('line-height', height + 'px');
 	}
 
 	$(document).ready(function () {
