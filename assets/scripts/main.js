@@ -47,11 +47,20 @@
 		});
 	}
 
+	app.colorPane = function (index, color) {
+		// index is the zero-index of the pane
+		// color is the color we want to change it to
+		$('.pane').eq(index).css('background-color', color);
+	}
+
 	app.addColorToPalette = function (color) {
 		// the argument colr should be a hex value including the hash
 		app.palette.push(color); // add to the data array
-		$('.palette-box').append('<div class="color-box" style="background-color:' + color + '"></div>'); // append element
-		console.log(app.palette);
+		$('.palette-box').append('<div class="color-box" style="opacity: 0; background-color:' + color + '"></div>'); // append element
+		$('.color-box').last().animate({
+			opacity: 1
+		}, 100);
+		app.makeBoxesDraggable();
 	}
 
 	app.removeColorFromPalette = function (index) {
@@ -96,7 +105,6 @@
 			e.preventDefault();
 			var color = $(this).parent().css('background-color');
 			app.addColorToPalette(color);
-			console.log('test');
 		});
 		// remove color from palette (need to delegate since .color-box does not exist on doc.ready)
 		$('.palette-box').on('click', '.color-box', function (e) {
@@ -116,6 +124,25 @@
 			} else if ( $targetPane.hasClass('locked') ) {
 				app.unlockPane(index);
 			}
+		});
+		// make panes droppable
+		$('.pane').droppable({
+			accept: '.color-box',
+			drop: function (e, ui) {
+				var color = ui.helper.css('background-color'),
+				index = $(this).index();
+				app.colorPane(index, color);
+				app.lockPane(index);
+			}
+		});
+	}
+
+	app.makeBoxesDraggable = function () {
+		// make .color-box draggable
+		$('.color-box').draggable({
+			helper: 'clone',
+			zIndex: 100,
+			cursor: 'move'
 		});
 	}
 
