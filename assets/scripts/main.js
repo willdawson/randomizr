@@ -35,12 +35,11 @@
 	app.palette = [];
 
 	app.getRandomColor = function () {
-		var characters = '0123456789abcdef'.split(''),
-		color = '#';
-		for (var i = 0; i < 6; i++ ) {
-			color += characters[Math.round(Math.random() * (characters.length - 1))];
+		function value () {
+			return Math.floor(Math.random() * (255 + 1));
 		}
-		console.log(color);
+		var color = 'rgba(' + value() + ', ' + value() + ', ' + value() + ')';
+		console.log(color);		
 		return color;
 	}
 
@@ -48,7 +47,7 @@
 		app.panes.each(function (i, pane) {
 			var color = app.getRandomColor();
 			if ( ! $(pane).hasClass('locked') ) {
-				$(pane).animate({'background-color': color}, 200);
+				$(pane).animate({'background-color': color}, 200, 'easeInOutQuad');
 			}
 		});
 	}
@@ -56,13 +55,14 @@
 	app.colorPane = function (index, color) {
 		// index is the zero-index of the pane
 		// color is the color we want to change it to
-		$('.pane').eq(index).css('background-color', color);
+		$('.pane').eq(index).animate({'background-color': color}, 200, 'easeInOutQuad');
 	}
 
 	app.addColorToPalette = function (color) {
 		// the argument colr should be a hex value including the hash
+		app.hideEmptyPaletteNotification();
 		app.palette.push(color); // add to the data array
-		$('.palette-box').append('<div class="color-box" style="opacity: 0; background-color:' + color + '"></div>'); // append element
+		$('.palette-box').append('<div class="color-box" style="opacity: 0"><div class="color-sample" style="background-color: ' + color + '"></div><p class="color-name">' + color + '</p><a class="delete-color-box" href="#">&times;</a>'); // append element
 		$('.color-box').last().animate({
 			opacity: 1
 		}, 100);
@@ -72,10 +72,21 @@
 	app.removeColorFromPalette = function (index) {
 		// argument is the zero-index of the item to remove in the palette
 		app.palette.splice(index, 1);
+		console.log(index);
+		if ( app.palette.length === 0 ) {
+			app.showEmptyPaletteNotification();
+		}
 		$('.palette-box').children('.color-box').eq(index).fadeOut(100, function () {
 			$(this).remove();
 		});
-		console.log(app.palette);
+	}
+
+	app.showEmptyPaletteNotification = function () {
+		$('.empty-palette-notification').show();
+	}
+
+	app.hideEmptyPaletteNotification = function () {
+		$('.empty-palette-notification').hide();
 	}
 
 	app.checkContrast = function getContrast50(hexcolor){
@@ -113,11 +124,10 @@
 			app.addColorToPalette(color);
 		});
 		// remove color from palette (need to delegate since .color-box does not exist on doc.ready)
-		$('.palette-box').on('click', '.color-box', function (e) {
+		$('.palette-box').on('click', '.delete-color-box', function (e) {
 			e.preventDefault();
-			console.log('test');
-			var index = $(this).index();
-			app.removeColorFromPalette(index);
+			var index = $(this).parent().index();
+			app.removeColorFromPalette(index - 1);
 		});
 		// lock panes
 		$('.lock-pane').on('click', function (e) {
@@ -135,10 +145,9 @@
 		$('.pane').droppable({
 			accept: '.color-box',
 			drop: function (e, ui) {
-				var color = ui.helper.css('background-color'),
+				var color = ui.helper.children('.color-box').css('background-color'),
 				index = $(this).index();
 				app.colorPane(index, color);
-				app.lockPane(index);
 			}
 		});
 	}
@@ -148,7 +157,7 @@
 		$('.color-box').draggable({
 			helper: 'clone',
 			zIndex: 100,
-			cursor: 'move'
+			cursor: '-webkit-grabbing'
 		});
 	}
 
