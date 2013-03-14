@@ -7,7 +7,7 @@
 	var app = app || {};
 
 	app.init = function () {
-		this.colorPanes();
+		this.colorPane();
 		this.bindEvents();
 		this.resizeWrapper();
 		this.positionControls();
@@ -30,9 +30,25 @@
 		});
 	}
 
-	app.panes = $('.pane');
+	app.pane = $('.pane');
 
 	app.palette = [];
+
+	app.colorHistory = [];
+
+	app.colorHistoryNumber = -1; // so first color added is [0]
+
+	app.goBackInHistory = function () {
+		app.colorHistoryNumber --;
+		var color = app.colorHistory[app.colorHistoryNumber];
+		app.colorPaneSpecific(color);
+	}
+
+	app.goForwardInHistory = function () {
+		app.colorHistoryNumber ++;
+		var color = app.colorHistory[app.colorHistoryNumber];
+		app.colorPaneSpecific(color);
+	}
 
 	app.getRandomColor = function () {
 		function value () {
@@ -43,42 +59,34 @@
 		return color;
 	}
 
-	app.colorPanes = function () {
-		app.panes.each(function (i, pane) {
-			var color = app.getRandomColor();
-			if ( ! $(pane).hasClass('locked') ) {
-				$(pane).animate({'background-color': color}, 200, 'easeInOutQuad');
-			}
-		});
+	app.colorPane = function () {
+		var color = app.getRandomColor();
+		$('.pane').animate({'background-color': color}, 200, 'easeInOutQuad');
+		app.colorHistory.push(color);
+		app.colorHistoryNumber ++;
+		console.log(app.colorHistory);
 	}
 
-	app.colorPane = function (index, color) {
-		// index is the zero-index of the pane
+	app.colorPaneSpecific = function (color) {
 		// color is the color we want to change it to
-		$('.pane').eq(index).animate({'background-color': color}, 200, 'easeInOutQuad');
+		$('.pane').animate({'background-color': color}, 200, 'easeInOutQuad');
 	}
 
 	app.addColorToPalette = function (color) {
 		// the argument colr should be a hex value including the hash
 		app.hideEmptyPaletteNotification();
 		app.palette.push(color); // add to the data array
-		$('.palette-box').append('<div class="color-box" style="opacity: 0"><div class="color-sample" style="background-color: ' + color + '"></div><p class="color-name">' + color + '</p><a class="delete-color-box" href="#">&times;</a>'); // append element
-		$('.color-box').last().animate({
-			opacity: 1
-		}, 100);
+		$('.palette-box').append('<div class="color-box"><div class="color-sample" style="background-color: ' + color + '"></div><p class="color-name">' + color + '</p><div class="delete-color-box-wrapper"><a class="delete-color-box" href="#">&times;</a></div>'); // append element
 		app.makeBoxesDraggable();
 	}
 
 	app.removeColorFromPalette = function (index) {
 		// argument is the zero-index of the item to remove in the palette
 		app.palette.splice(index, 1);
-		console.log(index);
+		$('.palette-box').children('.color-box').eq(index).remove();
 		if ( app.palette.length === 0 ) {
 			app.showEmptyPaletteNotification();
 		}
-		$('.palette-box').children('.color-box').eq(index).fadeOut(100, function () {
-			$(this).remove();
-		});
 	}
 
 	app.showEmptyPaletteNotification = function () {
@@ -95,7 +103,7 @@
 
 	app.lockPane = function (index) {
 		// argument is zero-index of pane to lock
-		var pane = app.panes[index];
+		var pane = app.pane[index];
 		$(pane).addClass('locked');
 		$(pane).children('.lock-pane').html('&#128274;');
 		console.log('lock pane');
@@ -103,7 +111,7 @@
 
 	app.unlockPane = function (index) {
 		// argument is zero-index of pane to lock
-		var pane = app.panes[index];
+		var pane = app.pane[index];
 		$(pane).removeClass('locked');
 		$(pane).children('.lock-pane').html('&#128275;');
 		console.log('unlock pane');
@@ -113,7 +121,7 @@
 		//refresh colors
 		$('.refresh-colors').on('click', function (e) {
 			e.preventDefault();
-			app.colorPanes();
+			app.colorPane();
 		});
 		// resize wrapper on window resize
 		$(window).on('resize', app.resizeWrapper);
@@ -145,11 +153,14 @@
 		$('.pane').droppable({
 			accept: '.color-box',
 			drop: function (e, ui) {
-				var color = ui.helper.children('.color-box').css('background-color'),
-				index = $(this).index();
-				app.colorPane(index, color);
+				var color = ui.helper.children('.color-sample').css('background-color');
+				console.log(color);
+				app.colorPaneSpecific(color);
 			}
 		});
+		// history
+		$('.color-history-back').on('click', app.goBackInHistory);
+		$('.color-history-forward').on('click', app.goForwardInHistory);
 	}
 
 	app.makeBoxesDraggable = function () {

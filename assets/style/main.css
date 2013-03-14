@@ -432,11 +432,8 @@ a {
     top: 50%;
     left: 50%;
     text-align: center; }
-    .pane-wrapper .pane-controls .refresh-colors:active,
-    .pane-wrapper .pane-controls .add-to-palette:active {
-      position: relative;
-      top: 2px; }
-    .pane-wrapper .pane-controls .refresh-colors, .pane-wrapper .pane-controls .add-to-palette {
+    .pane-wrapper .pane-controls .refresh-colors, .pane-wrapper .pane-controls .add-to-palette,
+    .pane-wrapper .pane-controls .color-history-back, .pane-wrapper .pane-controls .color-history-forward {
       display: inline-block;
       background: #fff;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
@@ -447,13 +444,20 @@ a {
       width: 100px;
       border-radius: 50px;
       font-size: 100px;
-      margin: 10px; }
-      .pane-wrapper .pane-controls .refresh-colors:hover, .pane-wrapper .pane-controls .add-to-palette:hover {
+      margin: 5px; }
+      .pane-wrapper .pane-controls .refresh-colors:hover, .pane-wrapper .pane-controls .add-to-palette:hover,
+      .pane-wrapper .pane-controls .color-history-back:hover, .pane-wrapper .pane-controls .color-history-forward:hover {
         text-decoration: none; }
-      .pane-wrapper .pane-controls .refresh-colors:active, .pane-wrapper .pane-controls .add-to-palette:active {
+      .pane-wrapper .pane-controls .refresh-colors:active, .pane-wrapper .pane-controls .add-to-palette:active,
+      .pane-wrapper .pane-controls .color-history-back:active, .pane-wrapper .pane-controls .color-history-forward:active {
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7); }
-      .pane-wrapper .pane-controls .refresh-colors i, .pane-wrapper .pane-controls .add-to-palette i {
+      .pane-wrapper .pane-controls .refresh-colors i, .pane-wrapper .pane-controls .add-to-palette i,
+      .pane-wrapper .pane-controls .color-history-back i, .pane-wrapper .pane-controls .color-history-forward i {
         font-family: "entypo", sans-serif; }
+      .pane-wrapper .pane-controls .refresh-colors:active, .pane-wrapper .pane-controls .add-to-palette:active,
+      .pane-wrapper .pane-controls .color-history-back:active, .pane-wrapper .pane-controls .color-history-forward:active {
+        position: relative;
+        top: 2px; }
 
 .palette-box {
   position: fixed;
@@ -473,7 +477,7 @@ a {
     position: relative; }
     .palette-box .color-box:hover {
       cursor: -webkit-grab; }
-    .palette-box .color-box:hover > .delete-color-box {
+    .palette-box .color-box:hover > .delete-color-box-wrapper {
       display: block; }
     .palette-box .color-box .color-sample {
       height: 110px;
@@ -487,33 +491,35 @@ a {
       color: #666;
       line-height: 30px;
       font-weight: 700; }
-    .palette-box .color-box .delete-color-box {
-      display: inline-block;
-      background: #fff;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
-      text-align: center;
-      color: #666;
+    .palette-box .color-box .delete-color-box-wrapper {
       display: none;
-      background-color: #fc0e03;
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      font-weight: 700;
-      border-radius: 99px;
       position: absolute;
-      right: -15px;
-      top: -15px;
-      text-align: center;
-      font-size: 24px;
-      line-height: 24px; }
-      .palette-box .color-box .delete-color-box:hover {
-        text-decoration: none; }
-      .palette-box .color-box .delete-color-box:active {
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7); }
-      .palette-box .color-box .delete-color-box i {
-        font-family: "entypo", sans-serif; }
-      .palette-box .color-box .delete-color-box:active {
-        top: -13px; }
+      right: -35px;
+      top: -35px;
+      padding: 20px; }
+      .palette-box .color-box .delete-color-box-wrapper .delete-color-box {
+        display: inline-block;
+        background: #fff;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+        text-align: center;
+        color: #666;
+        background-color: #fc0e03;
+        color: #fff;
+        width: 30px;
+        height: 30px;
+        font-weight: 700;
+        border-radius: 99px;
+        text-align: center;
+        font-size: 24px;
+        line-height: 24px; }
+        .palette-box .color-box .delete-color-box-wrapper .delete-color-box:hover {
+          text-decoration: none; }
+        .palette-box .color-box .delete-color-box-wrapper .delete-color-box:active {
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7); }
+        .palette-box .color-box .delete-color-box-wrapper .delete-color-box i {
+          font-family: "entypo", sans-serif; }
+        .palette-box .color-box .delete-color-box-wrapper .delete-color-box:active {
+          top: -13px; }
   .palette-box .empty-palette-notification {
     font-size: 24px;
     text-align: center;
