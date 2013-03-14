@@ -10,12 +10,24 @@
 		this.colorPanes();
 		this.bindEvents();
 		this.resizeWrapper();
+		this.positionControls();
 	}
 
 	app.resizeWrapper = function () {
 		var windowHeight = $(window).height(),
+		headerBoxHeight = $('.header-box').outerHeight(),
 		paletteBoxHeight = $('.palette-box').outerHeight();
-		$('.wrapper').height(windowHeight - paletteBoxHeight);
+		$('.pane-wrapper').height(windowHeight - paletteBoxHeight - headerBoxHeight);
+	}
+
+	app.positionControls = function () {
+		var $paneControls = $('.pane-controls'),
+		marginLeft = $paneControls.outerWidth() / -2,
+		marginTop = $paneControls.outerHeight() / -2;
+		$paneControls.css({
+			'margin-left': marginLeft,
+			'margin-top': marginTop
+		});
 	}
 
 	app.panes = $('.pane');
@@ -95,9 +107,9 @@
 		// resize wrapper on window resize
 		$(window).on('resize', app.resizeWrapper);
 		// add color to palette
-		$('.wrapper .pane .add-to-palette').on('click', function (e) {
+		$('.pane-wrapper .add-to-palette').on('click', function (e) {
 			e.preventDefault();
-			var color = $(this).parent().css('background-color');
+			var color = $('.pane').css('background-color');
 			app.addColorToPalette(color);
 		});
 		// remove color from palette (need to delegate since .color-box does not exist on doc.ready)

@@ -28,8 +28,6 @@ $white: #fff;
 @mixin button {
 	display: inline-block;
 	background: #fff;
-	background: -webkit-linear-gradient(top, #fff 0%, #ddd 100%); /* Chrome 10+, Safari 5.1+ */
-	background: linear-gradient(to bottom, #fff 0%, #ddd 100%); /* W3C */
 	box-shadow: 0 1px 5px rgba(0, 0, 0, .7);
 	text-align: center;
 	color: #666;
@@ -80,124 +78,73 @@ a {
 
 // SECTION 1
 //----------------------------------------------------------//
-.wrapper {
+.header-box {
+	height: 100px;
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	h1 {
+		font-size: 40px;
+		font-weight: 700;
+		color: #fff;
+		padding-left: 50px;
+		line-height: 100px;
+	}
+}
+
+.pane-wrapper {
 	width: 100%;
 	height: 100%;
 	position: fixed;
-	top: 0;
+	top: 100px; // same as .header-box height
 	left: 0;
 	box-shadow: 0 1px 7px rgba(0, 0, 0, .7);
 	z-index: 10;
 
 	.pane {
-		width: 50%;
-		height: 50%;
+		width: 100%;
+		height: 100%;
 		position: absolute;
 		font-size: 40px;
 		font-weight: bold;
 		text-align: center;
-
-		.add-to-palette {
-			@include button;
-			@include entypo;
-			font-size: 40px;
-			height: 40px;
-			width: 40px;
-			border-radius: 99px;
-			position: absolute;
-			text-align: center;
-
-			&:active {
-				bottom: 38px;
-			}
-		}
-
-		.lock-pane {
-			@include button;
-			@include entypo;
-			font-size: 40px;
-			height: 40px;
-			width: 40px;
-			border-radius: 99px;
-			position: absolute;
-		}
-
-		&.pane-1 {
-			top: 0;
-			left: 0;
-
-			.add-to-palette {
-				bottom: 40px;
-				right: 40px;
-			}
-
-			.lock-pane {
-				bottom: 80px;
-				right: 80px;
-			}
-		}
-
-		&.pane-2 {
-			top: 0;
-			left: 50%;
-
-			.add-to-palette {
-				bottom: 40px;
-				left: 40px;
-			}
-
-			.lock-pane {
-				bottom: 80px;
-				left: 80px;
-			}
-		}
-
-		&.pane-3 {
-			bottom: 0;
-			left: 0;
-
-			.add-to-palette {
-				top: 40px;
-				right: 40px;
-			}
-
-			.lock-pane {
-				top: 80px;
-				right: 80px;
-			}
-		}
-
-		&.pane-4 {
-			bottom: 0;
-			left: 50%;
-
-			.add-to-palette {
-				top: 40px;
-				left: 40px;
-			}
-
-			.lock-pane {
-				top: 80px;
-				left: 80px;
-			}
-		}
+		top: 0;
+		left: 0;
 	}
 
-	.refresh-colors {
-		@include button;
-		@include entypo;
-		height: 100px;
-		width: 100px;
-		margin-left: -50px;
-		margin-top: -50px;
+	.pane-controls {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		border-radius: 50px;
-		font-size: 100px;
+		text-align: center;
 
-		&:active {
-			margin-top: -48px; // move down by 2px
+		.refresh-colors,
+		.add-to-palette {
+			&:active {
+				position: relative;
+				top: 2px;
+			}
+		}
+
+		.refresh-colors {
+			@include button;
+			@include entypo;
+			height: 100px;
+			width: 100px;
+			border-radius: 50px;
+			font-size: 100px;
+			margin-bottom: 20px;
+		}
+
+		.add-to-palette {
+			@include button;
+			font-size: 24px;
+			border-radius: 99px;
+			padding: .5em 1em;
+			box-sizing: border-box;
+			text-align: center;
+			display: block;
 		}
 	}
 }
