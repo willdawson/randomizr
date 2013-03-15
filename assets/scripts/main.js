@@ -38,38 +38,72 @@
 
 	app.colorHistoryNumber = -1; // so first color added is [0]
 
+	app.canGoBackInHistory = function () {
+		if (app.colorHistoryNumber > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	app.canGoForwardInHistory = function () {
+		if (app.colorHistoryNumber <= app.colorHistory.length - 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	app.goBackInHistory = function () {
 		app.colorHistoryNumber --;
 		var color = app.colorHistory[app.colorHistoryNumber];
-		app.colorPaneSpecific(color);
+		app.colorPane(color);
 	}
 
 	app.goForwardInHistory = function () {
 		app.colorHistoryNumber ++;
 		var color = app.colorHistory[app.colorHistoryNumber];
-		app.colorPaneSpecific(color);
+		app.colorPane(color);
 	}
 
 	app.getRandomColor = function () {
 		function value () {
 			return Math.floor(Math.random() * (255 + 1));
 		}
-		var color = 'rgba(' + value() + ', ' + value() + ', ' + value() + ')';
-		console.log(color);		
+		var color = 'rgba(' + value() + ', ' + value() + ', ' + value() + ')';	
 		return color;
 	}
 
-	app.colorPane = function () {
-		var color = app.getRandomColor();
+	app.colorPane = function (color) {
+		var color = arguments[0] || app.getRandomColor();
 		$('.pane').animate({'background-color': color}, 200, 'easeInOutQuad');
 		app.colorHistory.push(color);
 		app.colorHistoryNumber ++;
-		console.log(app.colorHistory);
+		app.updateAddButton(color);
 	}
 
-	app.colorPaneSpecific = function (color) {
-		// color is the color we want to change it to
-		$('.pane').animate({'background-color': color}, 200, 'easeInOutQuad');
+	app.colorIsInPalette = function (color) {
+		if (app.palette.indexOf(color) >= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	app.deactivateButton = function ($button) {
+		$button.addClass('inactive');
+	}
+
+	app.activateButton = function ($button) {
+		$button.removeClass('inactive');
+	}
+
+	app.updateAddButton = function (color) {
+		if (app.colorIsInPalette(color)) {
+			app.deactivateButton($('.add-to-palette'));
+		} else {
+			app.activateButton($('.add-to-palette'));
+		}
 	}
 
 	app.addColorToPalette = function (color) {
@@ -78,15 +112,18 @@
 		app.palette.push(color); // add to the data array
 		$('.palette-box').append('<div class="color-box"><div class="color-sample" style="background-color: ' + color + '"></div><p class="color-name">' + color + '</p><div class="delete-color-box-wrapper"><a class="delete-color-box" href="#">&times;</a></div>'); // append element
 		app.makeBoxesDraggable();
+		app.updateAddButton(color);
 	}
 
 	app.removeColorFromPalette = function (index) {
 		// argument is the zero-index of the item to remove in the palette
+		var color = app.palette[index];
 		app.palette.splice(index, 1);
 		$('.palette-box').children('.color-box').eq(index).remove();
 		if ( app.palette.length === 0 ) {
 			app.showEmptyPaletteNotification();
 		}
+		app.updateAddButton(color);
 	}
 
 	app.showEmptyPaletteNotification = function () {
@@ -95,10 +132,6 @@
 
 	app.hideEmptyPaletteNotification = function () {
 		$('.empty-palette-notification').hide();
-	}
-
-	app.checkContrast = function getContrast50(hexcolor){
-		return (parseInt(hexcolor, 16) > 0xffffff/2) ? 'black':'white';
 	}
 
 	app.lockPane = function (index) {
@@ -134,8 +167,9 @@
 		// remove color from palette (need to delegate since .color-box does not exist on doc.ready)
 		$('.palette-box').on('click', '.delete-color-box', function (e) {
 			e.preventDefault();
-			var index = $(this).parent().index();
+			var index = $(this).parent().parent().index();
 			app.removeColorFromPalette(index - 1);
+			console.log(index);
 		});
 		// lock panes
 		$('.lock-pane').on('click', function (e) {
@@ -155,7 +189,7 @@
 			drop: function (e, ui) {
 				var color = ui.helper.children('.color-sample').css('background-color');
 				console.log(color);
-				app.colorPaneSpecific(color);
+				app.colorPane(color);
 			}
 		});
 		// history

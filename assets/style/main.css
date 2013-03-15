@@ -451,6 +451,11 @@ a {
       .pane-wrapper .pane-controls .refresh-colors:active, .pane-wrapper .pane-controls .add-to-palette:active,
       .pane-wrapper .pane-controls .color-history-back:active, .pane-wrapper .pane-controls .color-history-forward:active {
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7); }
+      .pane-wrapper .pane-controls .refresh-colors.inactive, .pane-wrapper .pane-controls .add-to-palette.inactive,
+      .pane-wrapper .pane-controls .color-history-back.inactive, .pane-wrapper .pane-controls .color-history-forward.inactive {
+        opacity: .5;
+        pointer-events: none;
+        cursor: default; }
       .pane-wrapper .pane-controls .refresh-colors i, .pane-wrapper .pane-controls .add-to-palette i,
       .pane-wrapper .pane-controls .color-history-back i, .pane-wrapper .pane-controls .color-history-forward i {
         font-family: "entypo", sans-serif; }
@@ -516,6 +521,10 @@ a {
           text-decoration: none; }
         .palette-box .color-box .delete-color-box-wrapper .delete-color-box:active {
           box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7); }
+        .palette-box .color-box .delete-color-box-wrapper .delete-color-box.inactive {
+          opacity: .5;
+          pointer-events: none;
+          cursor: default; }
         .palette-box .color-box .delete-color-box-wrapper .delete-color-box i {
           font-family: "entypo", sans-serif; }
         .palette-box .color-box .delete-color-box-wrapper .delete-color-box:active {
