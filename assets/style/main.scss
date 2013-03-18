@@ -161,10 +161,6 @@ a {
 		float: left;
 		position: relative;
 
-		&:hover {
-			cursor: -webkit-grab;
-		}
-
 		&:hover > .delete-color-box-wrapper {
 			display: block;
 		}
@@ -173,6 +169,14 @@ a {
 			height: 110px;
 			width: 140px;
 			box-shadow: 0 1px 7px rgba(0, 0, 0, .7);
+
+			&:hover {
+				cursor: -webkit-grab;
+			}
+
+			&:active {
+				cursor: -webkit-grabbing;
+			}
 		}
 
 		.color-name {
@@ -204,10 +208,6 @@ a {
 				text-align: center;
 				font-size: 24px;
 				line-height: 24px;
-
-				&:active {
-					top: -13px;
-				}
 			}
 		}
 	}

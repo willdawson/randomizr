@@ -6,6 +6,11 @@
 
 	var app = app || {};
 
+	app.options = {
+		easing: 'easeInOutQuad',
+		transitonDuration: 200
+	}
+
 	app.init = function () {
 		this.colorPane();
 		this.bindEvents();
@@ -76,7 +81,7 @@
 
 	app.colorPane = function (color) {
 		var color = arguments[0] || app.getRandomColor();
-		$('.pane').animate({'background-color': color}, 200, 'easeInOutQuad');
+		$('.pane').animate({'background-color': color}, 200, app.options.easing);
 		app.colorHistory.push(color);
 		app.colorHistoryNumber ++;
 		app.updateAddButton(color);
@@ -185,9 +190,9 @@
 		});
 		// make panes droppable
 		$('.pane').droppable({
-			accept: '.color-box',
+			accept: '.color-sample',
 			drop: function (e, ui) {
-				var color = ui.helper.children('.color-sample').css('background-color');
+				var color = ui.helper.css('background-color');
 				console.log(color);
 				app.colorPane(color);
 			}
@@ -198,11 +203,11 @@
 	}
 
 	app.makeBoxesDraggable = function () {
-		// make .color-box draggable
-		$('.color-box').draggable({
+		// make .color-sample draggable
+		$('.color-sample').draggable({
 			helper: 'clone',
 			zIndex: 100,
-			cursor: '-webkit-grabbing'
+			// cursor: '-webkit-grabbing'
 		});
 	}
 
